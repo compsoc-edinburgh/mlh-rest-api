@@ -1,7 +1,16 @@
 const express = require("express");
+const redis = require("redis");
+const config = require("./config");
 
 // express' router can be used to create views that aren't directly linked to an app
 const router = express.Router();
+
+const client = redis.createClient(config.redisConf);
+client.select(1);
+const a = client.get("a", (err, res) => {
+  return res;
+});
+console.log(client.get(a));
 
 // router.get means this view can be accessed with a GET request
 router.get("/", (req, res) => {

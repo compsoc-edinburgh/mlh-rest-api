@@ -1,0 +1,7 @@
+{
+    "redisConf" : {
+        "port" : 6379,
+        "host" : "findoslice.com"
+    },
+    "iexPublicKey" : "pk_bbd661beda994506838c693b0ef11ce2"
+}

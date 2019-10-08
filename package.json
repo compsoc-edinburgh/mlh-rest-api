@@ -4,7 +4,8 @@
   "description": "Code for CompSoc's mlh local hack day rest api workshop",
   "main": "index.js",
   "scripts": {
-    "run": "node index.js"
+    "start": "node index.js",
+    "populate": "node populate.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,8 @@
   },
   "homepage": "https://github.com/compsoc-edinburgh/mlh-rest-api#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "redis": "^2.8.0",
+    "request": "^2.88.0"
   }
 }
