@@ -1,0 +1,19 @@
+{
+  "name": "mlh-rest-api",
+  "version": "0.0.1",
+  "description": "Code for CompSoc's mlh local hack day rest api workshop",
+  "main": "run.js",
+  "scripts": {
+    "run" : "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/compsoc-edinburgh/mlh-rest-api.git"
+  },
+  "author": "Findlay Smith",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/compsoc-edinburgh/mlh-rest-api/issues"
+  },
+  "homepage": "https://github.com/compsoc-edinburgh/mlh-rest-api#readme"
+}
