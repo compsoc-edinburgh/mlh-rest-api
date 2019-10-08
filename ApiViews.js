@@ -6,10 +6,6 @@ const config = require("./config");
 // express' router can be used to create views that aren't directly linked to an app
 const router = express.Router();
 
-// create a redis client and select the database
-const client = redis.createClient(config.redisConf);
-client.select(0);
-
 // router.get means this view can be accessed with a GET request
 router.get("/", (req, res) => {
     // send the response back to the client
@@ -31,6 +27,10 @@ router.get("/current_time", (req, res) => {
 router.get("/price", (req, res) => {
     // check if the ticker query has been provided
     if (req.query.ticker) {
+        // create a redis client and select the database
+        let client = redis.createClient(config.redisConf);
+        client.select(0);
+
         let ticker = req.query.ticker.toUpperCase();
         // get the value from the database
         client.get(ticker, (err, val) => {
@@ -78,6 +78,32 @@ router.get("/price", (req, res) => {
         // throw an http error (400, bad request) if the ticker was not supplied
         res.status(400).json({
             error: "no ticker name supplied"
+        });
+    }
+});
+
+router.post("/price", (req, res) => {
+    // check that request body exists and that the correct values are present
+    if (req.body && req.body.ticker && req.body.price) {
+        // get a redis client
+        let client = redis.createClient(config.redisConf);
+        client.select(0);
+        // attempt to add the supplied value to the database
+        client.set(req.body.ticker, req.body.price, "EX", 120, (err, reply) => {
+            redis.print(err, reply);
+            // check that the request succeeded and send an appropriate http response
+            if (!err) {
+                res.sendStatus(200);
+            } else {
+                res.status(500).json({
+                    error: "Unkown database error"
+                });
+            }
+        });
+    } else {
+        // 400 bad request if the request body did not contain the correct values
+        res.status(400).json({
+            error: "To add a price you must include both ticker and price in your request body"
         });
     }
 });
