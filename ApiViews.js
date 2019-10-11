@@ -2,9 +2,13 @@ const express = require("express");
 const request = require("request");
 const redis = require("redis");
 const config = require("./config");
+const utils = require("./utils");
 
 // express' router can be used to create views that aren't directly linked to an app
 const router = express.Router();
+
+let client = redis.createClient(config.redisConf);
+client.select(0);
 
 // router.get means this view can be accessed with a GET request
 router.get("/", (req, res) => {
@@ -28,8 +32,6 @@ router.get("/price", (req, res) => {
     // check if the ticker query has been provided
     if (req.query.ticker) {
         // create a redis client and select the database
-        let client = redis.createClient(config.redisConf);
-        client.select(0);
 
         let ticker = req.query.ticker.toUpperCase();
         // get the value from the database
@@ -43,7 +45,7 @@ router.get("/price", (req, res) => {
             }
             // case when no value was found in the database
             else if (!val) {
-                let url = `https://cloud.iexapis.com/stable/stock/${ticker}/quote?token=${config.iexPublicKey}`;
+                let url = utils.generateUrl(ticker);
                 // request the stock price from iex
                 request(url, { json: true }, (err, result, body) => {
                     // check that there isn't an error and that a latestPrice has been returned
@@ -62,6 +64,9 @@ router.get("/price", (req, res) => {
                         });
                     } else {
                         console.log(err);
+                        res.status(500).json({
+                            error: " Unknown internal server error"
+                        });
                     }
                 });
             }
@@ -85,9 +90,6 @@ router.get("/price", (req, res) => {
 router.post("/price", (req, res) => {
     // check that request body exists and that the correct values are present
     if (req.body && req.body.ticker && req.body.price) {
-        // get a redis client
-        let client = redis.createClient(config.redisConf);
-        client.select(0);
         // attempt to add the supplied value to the database
         client.set(req.body.ticker, req.body.price, "EX", 120, (err, reply) => {
             redis.print(err, reply);
