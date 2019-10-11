@@ -56,16 +56,18 @@ const getTickerPrice = (ticker, price) => {
 
 module.exports = { generateUrl };
 
-if (process.argv.length == 5) {
-    if (process.argv[2] == "post") {
-        postTickerPrice(process.argv[3], parseInt(process.argv[4]));
-    } else if (process.argv[2] == "get") {
-        ticker = process.argv[3];
-        price = parseInt(process.argv[4]);
-        postTickerPrice(ticker, price);
-        getTickerPrice(ticker, price);
+if (process.argv[2] == "utils.js") {
+    if (process.argv.length == 5) {
+        if (process.argv[2] == "post") {
+            postTickerPrice(process.argv[3], parseInt(process.argv[4]));
+        } else if (process.argv[2] == "get") {
+            ticker = process.argv[3];
+            price = parseInt(process.argv[4]);
+            postTickerPrice(ticker, price);
+            getTickerPrice(ticker, price);
+        }
+    } else {
+        console.log("Whoops look like you didn't give the right arguments!");
+        console.log("The correct format is: `node utils.js (get|post) <ticker> <price>`");
     }
-} else {
-    console.log("Whoops look like you didn't give the right arguments!");
-    console.log("The correct format is: `node utils.js (get|post) <ticker> <price>`");
 }
