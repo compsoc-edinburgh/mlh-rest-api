@@ -90,18 +90,7 @@ router.get("/price", (req, res) => {
 router.post("/price", (req, res) => {
     // check that request body exists and that the correct values are present
     if (req.body && req.body.ticker && req.body.price) {
-        // attempt to add the supplied value to the database
-        client.set(req.body.ticker, req.body.price, "EX", 120, (err, reply) => {
-            redis.print(err, reply);
-            // check that the request succeeded and send an appropriate http response
-            if (!err) {
-                res.sendStatus(200);
-            } else {
-                res.status(500).json({
-                    error: "Unkown database error"
-                });
-            }
-        });
+        // add your code here
     } else {
         // 400 bad request if the request body did not contain the correct values
         res.status(400).json({
