@@ -54,6 +54,16 @@ const getTickerPrice = (ticker, price) => {
     });
 };
 
+const getAdd = (a, b) => {
+    request("localhost:4000/api/add", { json: { a: a, b: b } }, (err, res, body) => {
+        if (body.sum == a + b) {
+            console.log("Your code returned the correct value!");
+        } else {
+            console.log(`Your endpoint didn't return the correct response, the body it returned was ${body}`);
+        }
+    });
+};
+
 module.exports = { generateUrl };
 
 if (process.argv[2] == "utils.js") {
@@ -65,6 +75,10 @@ if (process.argv[2] == "utils.js") {
             price = parseInt(process.argv[4]);
             postTickerPrice(ticker, price);
             getTickerPrice(ticker, price);
+        } else if (process.argv[2] == "add") {
+            a = process.argv[3].parseInt();
+            b = process.argv[4].parseInt();
+            getAdd(a, b);
         }
     } else {
         console.log("Whoops look like you didn't give the right arguments!");
