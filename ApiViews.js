@@ -28,6 +28,27 @@ router.get("/current_time", (req, res) => {
     });
 });
 
+router.get("/add", (req, res) => {
+    if (req.body && req.body.a && req.body.b) {
+        let a = req.body.a;
+        let b = req.body.b;
+        if (typeof a == "number" && typeof b == "number") {
+            res.json({
+                sum: a + b
+            });
+        } else {
+            res.status(400).json({
+                error: "a and b must both be numbers"
+            });
+        }
+    } else {
+        // 400 bad request if the request body did not contain the correct values
+        res.status(400).json({
+            error: "You must include the numbers a and b in your request body"
+        });
+    }
+});
+
 router.get("/price", (req, res) => {
     // check if the ticker query has been provided
     if (req.query.ticker) {
