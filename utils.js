@@ -55,8 +55,8 @@ const getTickerPrice = (ticker, price) => {
 };
 
 const getAdd = (a, b) => {
-    request("localhost:4000/api/add", { json: { a: a, b: b } }, (err, res, body) => {
-        if (body.sum == a + b) {
+    request("http://localhost:4000/api/add", { json: { a: a, b: b } }, (err, res, body) => {
+        if (body && body.sum == a + b) {
             console.log("Your code returned the correct value!");
         } else {
             console.log(`Your endpoint didn't return the correct response, the body it returned was ${body}`);
@@ -66,7 +66,7 @@ const getAdd = (a, b) => {
 
 module.exports = { generateUrl };
 
-if (process.argv[2] == "utils.js") {
+if (process.argv.length > 2) {
     if (process.argv.length == 5) {
         if (process.argv[2] == "post") {
             postTickerPrice(process.argv[3], parseInt(process.argv[4]));
@@ -76,8 +76,8 @@ if (process.argv[2] == "utils.js") {
             postTickerPrice(ticker, price);
             getTickerPrice(ticker, price);
         } else if (process.argv[2] == "add") {
-            a = process.argv[3].parseInt();
-            b = process.argv[4].parseInt();
+            a = parseInt(process.argv[3]);
+            b = parseInt(process.argv[4]);
             getAdd(a, b);
         }
     } else {
